@@ -1,5 +1,6 @@
 package com.example.tictactoe
 
+import android.content.Intent
 import com.example.tictactoe.api.data.Game
 import com.example.tictactoe.api.data.GameState
 import com.example.tictactoe.api.GameService
@@ -10,7 +11,7 @@ object GameManager {
     var player: String? = null
     var state: GameState? = null
 
-    val StartingGameState: GameState = listOf(listOf(0, 0, 0), listOf(0, 0, 0), listOf(0, 0, 0))
+    val StartingGameState: GameState = listOf(listOf("0", "0", "0"), listOf("0", "0", "0"), listOf("0", "0", "0"))
 
     fun createGame(player: String) {
 
@@ -21,8 +22,12 @@ object GameManager {
 
                 println("${game} Successfully created game 11111")
 
+                GameHolder.game = game
+
+                val intent = Intent(MainActivity.context, GameActivity::class.java)
+                MainActivity.context.startActivity(intent)
                 // if creategame works, we test if joingame works
-                joinGame("test2", game!!.gameId)
+                //joinGame("test2", game!!.gameId)
 
             }
         }
@@ -35,13 +40,15 @@ object GameManager {
                 println("Error joining game 11111")
 
             } else {
-
                 println("${game} Successfully joined game 11111")
 
+                GameHolder.game = game
 
+                val intent = Intent(MainActivity.context, GameActivity::class.java)
+                MainActivity.context.startActivity(intent)
                 // if joingame works, we test if updategame works properly
-                val NewGameState: GameState = listOf(listOf(88, 0, 0), listOf(0, 0, 79), listOf(0, 0, 0))
-                updateGame(game!!.gameId, NewGameState)
+                //val NewGameState: GameState = listOf(listOf(88, 0, 0), listOf(0, 0, 79), listOf(0, 0, 0))
+                //updateGame(game!!.gameId, NewGameState)
 
 
             }
@@ -55,8 +62,9 @@ object GameManager {
                 println("failed to update 11111")
             } else {
                 println("${game} successful update 11111")
+
                 // if updategame works we test if pollgame works
-                pollGame(game!!.gameId)
+                //pollGame(game!!.gameId)
 
             }
         }
