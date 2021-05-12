@@ -13,14 +13,17 @@ class GameHolder {
     }
 }
 
+class MarkerHolder {
+    companion object {
+        var marker: String? = ""
+    }
+}
 
 class MainActivity : AppCompatActivity() {
 
     companion object {
         lateinit var context : MainActivity
     }
-
-    val TAG:String = "MainActivity"
 
     lateinit var binding: ActivityMainBinding
 
