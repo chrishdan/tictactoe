@@ -8,80 +8,173 @@ import com.example.tictactoe.api.GameService
 
 object GameManager {
 
-    var player: String? = null
-    var state: GameState? = null
 
-    val StartingGameState: GameState = listOf(listOf("0", "0", "0"), listOf("0", "0", "0"), listOf("0", "0", "0"))
+    val StartingGameState: GameState =
+        mutableListOf(mutableListOf("0", "0", "0"), mutableListOf("0", "0", "0"),mutableListOf("0", "0", "0"))
 
-    fun createGame(player: String) {
+    fun makeMove(position: Position){
+        val state = GameHolder.game?.state
 
-        GameService.createGame(player, StartingGameState) { game: Game?, err: Int? ->
-            if (err != null) {
-                println("${err} Failed to create game 11111")
-            } else {
+            state?.get(position.row)!![position.column] = MarkerHolder.marker.toString()
 
-                println("${game} Successfully created game 11111")
+            updateGame(GameHolder.game!!.gameId, state)
+    }
 
-                GameHolder.game = game
+    fun hasGameDraw(): Boolean {
+        val state = GameHolder.game!!.state
 
-                val intent = Intent(MainActivity.context, GameActivity::class.java)
-                MainActivity.context.startActivity(intent)
-                // if creategame works, we test if joingame works
-                //joinGame("test2", game!!.gameId)
+        val countNulls0: Int = state.count {it[0].contains("0")}
+        val countNulls1: Int = state.count {it[1].contains("0")}
+        val countNulls2: Int = state.count {it[2].contains("0")}
+        val nullCount: Int = countNulls0 + countNulls1 + countNulls2
 
-            }
+        val drawValue = 0
+
+        if (nullCount == drawValue) {
+            return true
         }
+        return false
+    }
+
+    fun hasGameEnded(): Boolean {
+        if (GameHolder.game?.state?.get(0)!![0] == "X"
+            && GameHolder.game?.state?.get(0)!![1] == "X"
+            && GameHolder.game?.state?.get(0)!![2] == "X") {
+            return true
+        }else if (GameHolder.game?.state?.get(0)!![0] == "O"
+            && GameHolder.game?.state?.get(0)!![1] == "O"
+            && GameHolder.game?.state?.get(0)!![2] == "O") {
+            return true
+        }else if (GameHolder.game?.state?.get(1)!![0] == "X"
+                && GameHolder.game?.state?.get(1)!![1] == "X"
+                && GameHolder.game?.state?.get(1)!![2] == "X") {
+                return true
+        }else if (GameHolder.game?.state?.get(1)!![0] == "O"
+            && GameHolder.game?.state?.get(1)!![1] == "O"
+            && GameHolder.game?.state?.get(1)!![2] == "O") {
+            return true
+
+        } else if (GameHolder.game?.state?.get(2)!![0] == "X"
+            && GameHolder.game?.state?.get(2)!![1]== "X"
+            && GameHolder.game?.state?.get(2)!![2] == "X") {
+            return true
+        } else if (GameHolder.game?.state?.get(2)!![0] == "O"
+            && GameHolder.game?.state?.get(2)!![1]== "O"
+            && GameHolder.game?.state?.get(2)!![2] == "O") {
+            return true
+
+        } else if (GameHolder.game?.state?.get(0)!![0]== "X"
+            && GameHolder.game?.state?.get(1)!![0]== "X"
+            && GameHolder.game?.state?.get(2)!![0]== "X") {
+            return true
+        } else if (GameHolder.game?.state?.get(0)!![0]== "O"
+            && GameHolder.game?.state?.get(1)!![0]== "O"
+            && GameHolder.game?.state?.get(2)!![0]== "O") {
+            return true
+
+        } else if (GameHolder.game?.state?.get(0)!![1] == "X"
+            && GameHolder.game?.state?.get(1)!![1]== "X"
+            && GameHolder.game?.state?.get(2)!![1]== "X") {
+            return true
+
+        } else if (GameHolder.game?.state?.get(0)!![1] == "O"
+            && GameHolder.game?.state?.get(1)!![1]== "O"
+            && GameHolder.game?.state?.get(2)!![1]== "O") {
+            return true
+
+        } else if (GameHolder.game?.state?.get(0)!![2]== "X"
+            && GameHolder.game?.state?.get(1)!![2]== "X"
+            && GameHolder.game?.state?.get(2)!![2]== "X") {
+            return true
+        } else if (GameHolder.game?.state?.get(0)!![2]== "O"
+            && GameHolder.game?.state?.get(1)!![2]== "O"
+            && GameHolder.game?.state?.get(2)!![2]== "O") {
+            return true
+
+        } else if (GameHolder.game?.state?.get(0)!![0]== "X"
+            && GameHolder.game?.state?.get(1)!![1]== "X"
+            && GameHolder.game?.state?.get(2)!![2]== "X") {
+            return true
+        } else if (GameHolder.game?.state?.get(0)!![0]== "O"
+            && GameHolder.game?.state?.get(1)!![1]== "O"
+            && GameHolder.game?.state?.get(2)!![2]== "O") {
+            return true
+
+        } else if (GameHolder.game?.state?.get(2)!![0]== "X"
+            && GameHolder.game?.state?.get(1)!![1]== "X"
+            && GameHolder.game?.state?.get(2)!![0]== "X") {
+            return true
+        } else if (GameHolder.game?.state?.get(2)!![0]== "O"
+                && GameHolder.game?.state?.get(1)!![1]== "O"
+                && GameHolder.game?.state?.get(2)!![0]== "O") {
+                 return true
+        }
+
+        return false
 
     }
 
-    fun joinGame(player: String, gameId: String) {
-        GameService.joinGame(player,gameId) { game: Game?, err: Int? ->
-            if (err != null) {
-                println("Error joining game 11111")
+        fun createGame(player: String) {
 
-            } else {
-                println("${game} Successfully joined game 11111")
+            GameService.createGame(player, StartingGameState) { game: Game?, err: Int? ->
+                if (err != null) {
+                } else {
+                    GameHolder.game = game
 
-                GameHolder.game = game
+                    val intent = Intent(MainActivity.context, GameActivity::class.java)
+                    MainActivity.context.startActivity(intent)
+                    // if creategame works, we test if joingame works
+                    //joinGame("test2", game!!.gameId)
 
-                val intent = Intent(MainActivity.context, GameActivity::class.java)
-                MainActivity.context.startActivity(intent)
-                // if joingame works, we test if updategame works properly
-                //val NewGameState: GameState = listOf(listOf(88, 0, 0), listOf(0, 0, 79), listOf(0, 0, 0))
-                //updateGame(game!!.gameId, NewGameState)
-
-
+                }
             }
+
         }
 
-    }
+        fun joinGame(player: String, gameId: String) {
+            GameService.joinGame(player, gameId) { game: Game?, err: Int? ->
+                if (err != null) {
+                } else {
+                    GameHolder.game = game
 
-    fun updateGame(gameId: String, state:GameState) {
-        GameService.updateGame(gameId, state) { game: Game?, err: Int? ->
-            if (err != null) {
-                println("failed to update 11111")
-            } else {
-                println("${game} successful update 11111")
+                    val intent = Intent(MainActivity.context, GameActivity::class.java)
+                    MainActivity.context.startActivity(intent)
+                    // if joingame works, we test if updategame works properly
+                    //val NewGameState: GameState = listOf(listOf(88, 0, 0), listOf(0, 0, 79), listOf(0, 0, 0))
+                    //updateGame(game!!.gameId, NewGameState)
 
-                // if updategame works we test if pollgame works
-                //pollGame(game!!.gameId)
 
+                }
             }
+
         }
 
-    }
+        fun updateGame(gameId: String, state: GameState) {
+            GameService.updateGame(gameId, state) { game: Game?, err: Int? ->
+                if (err != null) {
+                } else {
 
+                    GameHolder.game = game
+                    // if updategame works we test if pollgame works
+                    //pollGame(game!!.gameId)
 
-    fun pollGame(gameId: String) {
-        GameService.pollGame(gameId) { game: Game?, err: Int? ->
-            if (err != null) {
-                println("failed to poll 11111")
-            } else {
-                println("${game}  successful poll 11111")
-
+                }
             }
+
         }
 
-    }
+
+        fun pollGame(gameId: String) {
+            GameService.pollGame(gameId) { game: Game?, err: Int? ->
+                if (err != null) {
+
+                } else {
+
+                    GameHolder.game = game
+                }
+            }
+
+        }
 
 }
+

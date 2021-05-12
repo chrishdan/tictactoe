@@ -7,8 +7,6 @@ import androidx.fragment.app.DialogFragment
 import com.example.tictactoe.GameManager
 import com.example.tictactoe.databinding.DialogJoinGameBinding
 
-
-
 class JoinGameDialog() : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
