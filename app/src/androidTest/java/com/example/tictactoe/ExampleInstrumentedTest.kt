@@ -1,24 +1,40 @@
 package com.example.tictactoe
 
-import androidx.test.platform.app.InstrumentationRegistry
-import androidx.test.ext.junit.runners.AndroidJUnit4
-
+import com.example.tictactoe.api.GameService
+import com.example.tictactoe.api.data.Game
+import com.example.tictactoe.api.data.GameState
 import org.junit.Test
-import org.junit.runner.RunWith
 
 import org.junit.Assert.*
 
-/**
- * Instrumented test, which will execute on an Android device.
- *
- * See [testing documentation](http://d.android.com/tools/testing).
- */
-@RunWith(AndroidJUnit4::class)
 class ExampleInstrumentedTest {
+
+    var gameState: Game? = null
+    val firstPlayer:String = "Player1"
+    val secondPlayer:String = "Player2"
+    val StartingGameState: GameState =
+        mutableListOf(
+            mutableListOf("0", "0", "0"),
+            mutableListOf("0", "0", "0"),
+            mutableListOf("0", "0", "0")
+        )
+
+    /*
     @Test
-    fun useAppContext() {
-        // Context of the app under test.
-        val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("com.example.tictactoe", appContext.packageName)
+    fun createGame(){
+        GameService.createGame(firstPlayer,StartingGameState ){ state:Game?, err:Int? ->
+            gameState = state
+            assertNotNull(state)
+            assertNotNull(state?.gameId)
+            assertEquals(firstPlayer, state?.players?.get(0))
+        }
     }
+
+    fun JoinGame(){
+        GameService.joinGame(secondPlayer, gameState!!.gameId) {state:Game?, err:Int? ->
+            gameState = state
+            assertEquals(firstPlayer, state?.players?.get(0))
+        }
+    }
+    */
 }

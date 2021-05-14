@@ -2,8 +2,8 @@ package com.example.tictactoe
 
 import android.app.Application
 
-class App:Application() {
-    companion object{
+class App : Application() {
+    companion object {
         lateinit var context: App private set
     }
 

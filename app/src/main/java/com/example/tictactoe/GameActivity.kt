@@ -1,17 +1,21 @@
 package com.example.tictactoe
 
-import android.icu.text.Transliterator
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.TextView
+import androidx.core.view.isVisible
 import com.example.tictactoe.api.data.Game
 import com.example.tictactoe.databinding.ActivityGameBinding
+import kotlinx.android.synthetic.main.activity_game.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 var screenUpdater: Boolean = true
+
+var p1score: Int = 0
+var p2score: Int = 0
 
 class GameActivity : AppCompatActivity() {
 
@@ -25,7 +29,10 @@ class GameActivity : AppCompatActivity() {
     private lateinit var eight21: TextView
     private lateinit var nine22: TextView
 
-    private lateinit var binding:ActivityGameBinding
+    private lateinit var player1Score: TextView
+    private lateinit var player2Score: TextView
+
+    private lateinit var binding: ActivityGameBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,15 +52,19 @@ class GameActivity : AppCompatActivity() {
         eight21 = binding.view21
         nine22 = binding.view22
 
-        one00.setOnClickListener { onBoxClicked(one00,  Position(0, 0)) }
+        player1Score = binding.player1Score
+        player2Score = binding.player2Score
+
+        one00.setOnClickListener { onBoxClicked(one00, Position(0, 0)) }
         two01.setOnClickListener { onBoxClicked(two01, Position(0, 1)) }
         three02.setOnClickListener { onBoxClicked(three02, Position(0, 2)) }
-        four10.setOnClickListener { onBoxClicked(four10, Position(1, 0))}
+        four10.setOnClickListener { onBoxClicked(four10, Position(1, 0)) }
         five11.setOnClickListener { onBoxClicked(five11, Position(1, 1)) }
         six12.setOnClickListener { onBoxClicked(six12, Position(1, 2)) }
-        seven20.setOnClickListener { onBoxClicked(seven20, Position(2, 0))}
+        seven20.setOnClickListener { onBoxClicked(seven20, Position(2, 0)) }
         eight21.setOnClickListener { onBoxClicked(eight21, Position(2, 1)) }
         nine22.setOnClickListener { onBoxClicked(nine22, Position(2, 2)) }
+
 
         MarkerHolder.marker = "X"
 
@@ -61,40 +72,48 @@ class GameActivity : AppCompatActivity() {
             MarkerHolder.marker = "O"
         }
 
+        binding.resetview.setOnClickListener {
+            resetState()
+            updateScreen()
+        }
+
+        binding.resetview.isVisible = false
+
         updateScreen()
 
     }
+
 
     private fun onBoxClicked(box: TextView, position: Position) {
         turnChecker()
 
         if (turnChecker() == true) {
             GameManager.makeMove(position)
-        } else{
+        } else {
             println("Its not your turn 11111")
         }
     }
 
-    private fun gameEndChecker(): String {
-        var winner = ""
-        val winGame = GameManager.hasGameEnded()
-        val drawGame = GameManager.hasGameDraw()
+    // Receives winner = "X" or "O" or "DRAW" and shows it on the screen
+    private fun gameEndChecker(winner: String) {
+        val players = GameHolder.game!!.players
+        val p1win = "${players[0]} wins!"
+        val p2win = "${players[1]} wins"
+        val draw = "DRAW!"
 
-        if (winGame == false) {
-            if (drawGame == true) {
-                winner = "DRAW"
+        when (winner) {
+            "X" -> {
+                binding.winnerview.text = p1win
             }
-
-        }else if (winGame == true) {
-            if (MarkerHolder.marker == "X")
-            {
-                winner = GameHolder.game!!.players[0]
-            }else {
-                winner = GameHolder.game!!.players[1]
+            "O" -> {
+                binding.winnerview.text = p2win
+            }
+            "DRAW" -> {
+                binding.winnerview.text = draw
             }
 
         }
-        return winner
+
     }
 
     private fun turnChecker(): Boolean {
@@ -102,9 +121,9 @@ class GameActivity : AppCompatActivity() {
         var checkTurn = false
         val state = GameHolder.game!!.state
 
-        val countNulls0: Int = state.count {it[0].contains("0")}
-        val countNulls1: Int = state.count {it[1].contains("0")}
-        val countNulls2: Int = state.count {it[2].contains("0")}
+        val countNulls0: Int = state.count { it[0].contains("0") }
+        val countNulls1: Int = state.count { it[1].contains("0") }
+        val countNulls2: Int = state.count { it[2].contains("0") }
         val nullCount: Int = countNulls0 + countNulls1 + countNulls2
 
         println("$nullCount")
@@ -116,16 +135,26 @@ class GameActivity : AppCompatActivity() {
             if (MarkerHolder.marker == "X") {
                 checkTurn = true
             }
-        } else if (listO.contains(nullCount) ) {
-            if   (MarkerHolder.marker == "O") {
+        } else if (listO.contains(nullCount)) {
+            if (MarkerHolder.marker == "O") {
                 checkTurn = true
             }
         }
         return checkTurn
     }
 
-
+    // Adds score to winner and resets the board, both players need to press it to play again
     private fun resetState() {
+        // Had a bug with adding score, worked the best adding score when reset is pressed
+        if (GameManager.hasGameEnded() == "X") {
+            p1score++
+        } else if (GameManager.hasGameEnded() == "O") {
+            p2score++
+        }
+
+        val resetwinner = ""
+        binding.winnerview.text = resetwinner
+
         one00.text = ""
         two01.text = ""
         three02.text = ""
@@ -136,16 +165,6 @@ class GameActivity : AppCompatActivity() {
         eight21.text = ""
         nine22.text = ""
 
-        one00.background = null
-        two01.background = null
-        three02.background = null
-        four10.background = null
-        five11.background = null
-        six12.background = null
-        seven20.background = null
-        eight21.background = null
-        nine22.background = null
-
         one00.isEnabled = true
         two01.isEnabled = true
         three02.isEnabled = true
@@ -155,6 +174,12 @@ class GameActivity : AppCompatActivity() {
         seven20.isEnabled = true
         eight21.isEnabled = true
         nine22.isEnabled = true
+
+        GameManager.updateGame(GameHolder.game!!.gameId, GameManager.StartingGameState)
+
+        binding.resetview.isVisible = false
+        screenUpdater = true
+
     }
 
     private fun disableBoard() {
@@ -172,6 +197,7 @@ class GameActivity : AppCompatActivity() {
     }
 
     private fun updateScreen() {
+        // loops every 0.3 second as long as screenUpdater is true
         CoroutineScope(IO).launch {
             while (screenUpdater == true) {
                 delay(300)
@@ -180,37 +206,35 @@ class GameActivity : AppCompatActivity() {
                     if (GameHolder.game?.players?.count() == 2) {
                         binding.player2Name.text = GameHolder.game?.players?.get(1)
                     }
-                    one00.text = GameHolder.game?.state?.get(0)!![0].takeUnless { it == "0" }
-                    two01.text = GameHolder.game?.state?.get(0)!![1].takeUnless { it == "0" }
-                    three02.text = GameHolder.game?.state?.get(0)!![2].takeUnless { it == "0" }
-                    four10.text = GameHolder.game?.state?.get(1)!![0].takeUnless { it == "0" }
-                    five11.text = GameHolder.game?.state?.get(1)!![1].takeUnless { it == "0" }
-                    six12.text = GameHolder.game?.state?.get(1)!![2].takeUnless { it == "0" }
-                    seven20.text = GameHolder.game?.state?.get(2)!![0].takeUnless { it == "0" }
-                    eight21.text = GameHolder.game?.state?.get(2)!![1].takeUnless { it == "0" }
-                    nine22.text = GameHolder.game?.state?.get(2)!![2].takeUnless { it == "0" }
+                    val state = GameHolder.game!!.state
+                    one00.text = state[0][0].takeUnless { it == "0" }
+                    two01.text = state[0][1].takeUnless { it == "0" }
+                    three02.text = state[0][2].takeUnless { it == "0" }
+                    four10.text = state[1][0].takeUnless { it == "0" }
+                    five11.text = state[1][1].takeUnless { it == "0" }
+                    six12.text = state[1][2].takeUnless { it == "0" }
+                    seven20.text = state[2][0].takeUnless { it == "0" }
+                    eight21.text = state[2][1].takeUnless { it == "0" }
+                    nine22.text = state[2][2].takeUnless { it == "0" }
 
-                    val gameWinner = gameEndChecker()
-                    if (gameWinner != "") {
+                    val scoretext1 = "Score: ${p1score} "
+                    val scoretext2 = "Score: ${p2score} "
+                    player1Score.text = scoretext1
+                    player2Score.text = scoretext2
+
+                    // If game is over, we receive "X", "O" or "DRAW" from hasGameEnded and pass this onto gameEndChecker
+                    val winner = GameManager.hasGameEnded().takeUnless { it == "" }
+                    if (winner != null) {
                         disableBoard()
-                        if (gameWinner == "X") {
-                            println("${GameHolder.game!!.players[0]} ($gameWinner) wins! 11111")
-                        } else if (gameWinner == "O") {
-                            println("${GameHolder.game!!.players[1]} ($gameWinner) wins! 11111")
-                        } else {
-                            println("$gameWinner 11111!")
-                        }
-
+                        gameEndChecker(winner)
+                        binding.resetview.isVisible = true
                         screenUpdater = false
-                        resetState()
-
-
 
                     }
 
                 }
-
             }
+
         }
     }
 
