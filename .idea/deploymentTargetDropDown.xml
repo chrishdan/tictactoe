@@ -18,6 +18,15 @@
         <type value="RUNNING_DEVICE_TARGET" />
         <deviceKey>
           <Key>
+            <type value="VIRTUAL_DEVICE_PATH" />
+            <value value="C:\Users\chris\.android\avd\Pixel_4a_API_30_x86.avd" />
+          </Key>
+        </deviceKey>
+      </Target>
+      <Target>
+        <type value="RUNNING_DEVICE_TARGET" />
+        <deviceKey>
+          <Key>
             <type value="SERIAL_NUMBER" />
             <value value="ce12171c8182da0404" />
           </Key>
@@ -30,7 +39,7 @@
         <deviceKey>
           <Key>
             <type value="VIRTUAL_DEVICE_PATH" />
-            <value value="C:\Users\chris\.android\avd\Pixel_4_API_30.avd" />
+            <value value="C:\Users\chris\.android\avd\Pixel_4a_API_30_x86.avd" />
           </Key>
         </deviceKey>
       </Target>

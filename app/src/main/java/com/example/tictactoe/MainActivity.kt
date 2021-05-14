@@ -22,7 +22,7 @@ class MarkerHolder {
 class MainActivity : AppCompatActivity() {
 
     companion object {
-        lateinit var context : MainActivity
+        lateinit var context: MainActivity
     }
 
     lateinit var binding: ActivityMainBinding
@@ -50,14 +50,14 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun createNewGame(){
+    private fun createNewGame() {
         val dlg = CreateGameDialog()
-        dlg.show(supportFragmentManager,"CreateGameDialogFragment")
+        dlg.show(supportFragmentManager, "CreateGameDialogFragment")
     }
 
-    private fun joinGame(){
+    private fun joinGame() {
         val dlg = JoinGameDialog()
-        dlg.show(supportFragmentManager,"JoinGameDialogFragment")
+        dlg.show(supportFragmentManager, "JoinGameDialogFragment")
     }
 
 

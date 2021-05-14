@@ -12,8 +12,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:textSize="20sp"
         android:text=""
+        android:textSize="20sp"
         app:layout_constraintEnd_toStartOf="@+id/player2Name"
         app:layout_constraintHorizontal_bias="0.1"
         app:layout_constraintStart_toStartOf="parent"
@@ -43,14 +43,57 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/winnerview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textColor="@color/teal_700"
+        android:textSize="40sp"
+        app:layout_constraintBottom_toTopOf="@+id/border5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/showgameId" />
+
+    <TextView
+        android:id="@+id/player1Score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        app:layout_constraintEnd_toStartOf="@+id/showgameId"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/player1Name" />
+
+    <TextView
+        android:id="@+id/player2Score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/showgameId"
+        app:layout_constraintTop_toBottomOf="@+id/player2Name" />
+
+    <TextView
+        android:id="@+id/resetview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Reset"
+        android:textColor="@color/teal_700"
+        android:textSize="40sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view_21" />
+
+
     <View
         android:id="@+id/border7"
         android:layout_width="4dp"
         android:layout_height="0dp"
         android:background="#000000"
+        app:layout_constraintBottom_toBottomOf="@id/view_20"
         app:layout_constraintStart_toStartOf="@+id/view_10"
-        app:layout_constraintTop_toTopOf="@+id/view_00"
-        app:layout_constraintBottom_toBottomOf="@id/view_20"/>
+        app:layout_constraintTop_toTopOf="@+id/view_00" />
 
 
     <View
@@ -58,9 +101,9 @@
         android:layout_width="4dp"
         android:layout_height="0dp"
         android:background="#000000"
+        app:layout_constraintBottom_toBottomOf="@id/view_20"
         app:layout_constraintStart_toEndOf="@+id/view_12"
-        app:layout_constraintTop_toTopOf="@+id/view_02"
-        app:layout_constraintBottom_toBottomOf="@id/view_20" />
+        app:layout_constraintTop_toTopOf="@+id/view_02" />
 
 
     <View
